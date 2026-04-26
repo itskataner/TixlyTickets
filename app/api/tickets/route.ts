@@ -82,8 +82,8 @@ export async function POST(request: Request) {
       venue: EVENT_VENUE,
     });
 
-    const url =
-      process.env.NEXT_PAYMENT_SERVER_URL || "http://localhost:8080/graphql";
+    const url = process.env.NEXT_PAYMENT_SERVER_URL || "";
+    console.log("Payment server URL:", url);
 
     const mutation = `
       mutation TicketPayment($amount: Int!, $phoneNumber: String!, $username: String!, $ticketId: String!) {
