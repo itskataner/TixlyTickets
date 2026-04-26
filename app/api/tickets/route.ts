@@ -82,7 +82,8 @@ export async function POST(request: Request) {
       venue: EVENT_VENUE,
     });
 
-    const url = "http://localhost:8080/graphql";
+    const url =
+      process.env.NEXT_PAYMENT_SERVER_URL || "http://localhost:8080/graphql";
 
     const mutation = `
       mutation TicketPayment($amount: Int!, $phoneNumber: String!, $username: String!, $ticketId: String!) {
@@ -99,7 +100,7 @@ export async function POST(request: Request) {
       amount: booking.total,
       phoneNumber: formatTo254(booking.phone),
       username: booking.name,
-      ticketId: booking.bookingId
+      ticketId: booking.bookingId,
     };
 
     const response = await fetch(url, {
@@ -109,9 +110,9 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         query: mutation,
-        variables: variables
-      })
-    })
+        variables: variables,
+      }),
+    });
 
     if (response.status !== 200) {
       throw new Error("Could not create booking.");
