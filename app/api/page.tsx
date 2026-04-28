@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useState, useEffect, type CSSProperties } from "react";
 
 const EVENT_NAME = "KENYATTA UNIVERSITY ORCHESTRA";
 const EVENT_SUBTITLE = "An Evening of Symphonic Excellence";
 const EVENT_EYEBROW = "Kenyatta University Music Department";
-const EVENT_VENUE = "CHINA SQUARE AUDITORIUM";
+const EVENT_VENUE = "CONFUSCIOUS HALL KENYATTA UNIVERSITY";
 
 const TICKET_TYPES = [
   { name: "Student", price: 500, description: "carry student id" },
@@ -53,6 +53,24 @@ export default function HomePage() {
   const [serverMessage, setServerMessage] = useState("");
   const [pdfDownloadError, setPdfDownloadError] = useState("");
   const [booking, setBooking] = useState<TicketBookingResponse | null>(null);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const eventDate = new Date("2026-05-29T16:00:00");
+    const tick = () => {
+      const diff = eventDate.getTime() - Date.now();
+      if (diff <= 0) return;
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   const selectedTickets = useMemo(
     () =>
@@ -260,8 +278,26 @@ export default function HomePage() {
           <div className="sky-eyebrow">{EVENT_EYEBROW}</div>
           <div className="sky-main-title">{EVENT_NAME}</div>
           <div className="sky-sub-title">{EVENT_SUBTITLE}</div>
-        </div>
-      </div>
+          <div className="countdown">
+            <div className="countdown-unit">
+              <span className="countdown-val">{String(timeLeft.days).padStart(2, "0")}</span>
+              <span className="countdown-label">Days</span>
+            </div>
+            <div className="countdown-unit">
+              <span className="countdown-val">{String(timeLeft.hours).padStart(2, "0")}</span>
+              <span className="countdown-label">Hours</span>
+            </div>
+            <div className="countdown-unit">
+              <span className="countdown-val">{String(timeLeft.minutes).padStart(2, "0")}</span>
+              <span className="countdown-label">Mins</span>
+            </div>
+            <div className="countdown-unit">
+              <span className="countdown-val">{String(timeLeft.seconds).padStart(2, "0")}</span>
+              <span className="countdown-label">Secs</span>
+            </div>
+          </div>
+        </div>{/* ← closes sky-title-overlay */}
+      </div>{/* ← closes sky-world */}
 
       <div className="main-section">
         <div className="main">

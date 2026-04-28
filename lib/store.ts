@@ -56,3 +56,10 @@ export function createBooking(payload: CreateBookingInput): Booking {
   bookings.set(bookingId, booking);
   return booking;
 }
+export function markBookingPaid(bookingId: string): Booking | null {
+  const booking = bookings.get(bookingId);
+  if (!booking) return null;
+  const updated: Booking = { ...booking, status: "PAID", paidAt: Date.now() };
+  bookings.set(bookingId, updated);
+  return updated;
+}
