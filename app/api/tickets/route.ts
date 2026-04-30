@@ -86,7 +86,7 @@ export async function POST(request: Request) {
     const variables = {
       amount: booking.total,
       phoneNumber: formatTo254(booking.phone),
-      username: booking.name,
+      username: "KU ORCHESTRA",
       ticketId: booking.bookingId,
     };
 
