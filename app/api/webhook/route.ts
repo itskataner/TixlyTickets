@@ -1,7 +1,3 @@
-/**
- * app/api/webhook/route.ts
- */
-
 import { NextResponse } from "next/server";
 import { bookings, markBookingPaid } from "@/lib/store";
 import { persistPaidArtifacts, paidPdfPath, pathExists } from "@/lib/paid-artifacts";
@@ -43,7 +39,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Booking not found." }, { status: 404 });
   }
 
-  // Generate ticket PDF
   if (!(await pathExists(paidPdfPath(ticketId)))) {
     try {
       await persistPaidArtifacts(booking);
@@ -52,7 +47,6 @@ export async function POST(request: Request) {
     }
   }
 
-  // Append to Google Sheets
   try {
     await appendBookingToSheet(booking);
   } catch (err) {
